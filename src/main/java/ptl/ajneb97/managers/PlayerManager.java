@@ -79,9 +79,11 @@ public class PlayerManager {
 					return;
 				}
 
-				// Set the player to spectator gamemode instead of kicking them
-				player.setGameMode(GameMode.SPECTATOR);
-				plugin.getMensajesManager().enviarMensaje(player, "&cYour practice time has expired. Your gamemode has been set to SPECTATOR.", true);
+				if (!player.getGameMode().equals(GameMode.SPECTATOR)) {
+					// Set the player to spectator gamemode instead of kicking them
+					player.setGameMode(GameMode.SPECTATOR);
+					plugin.getMensajesManager().enviarMensaje(player, "&cYour practice time has expired. Your gamemode has been set to SPECTATOR.", true);
+				}
 			}
 		}.runTask(plugin);
 	}
@@ -133,7 +135,9 @@ public class PlayerManager {
 		String timeString = "";
 		if(timeLimit == 0) {
 			timeString = msgManager.getTimeInfinite();
-		}else {
+		} else if (remainingTime < 0) {
+			timeString = "0s";
+		} else {
 			timeString = UtilsTime.getTime(remainingTime,msgManager);
 		}
 		return timeString;
